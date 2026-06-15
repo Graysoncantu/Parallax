@@ -3,395 +3,331 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ECHO // Official Artist Profile</title>
+    <title>Parallax | Official</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;700&family=Syncopate:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         /* --- RESET & BASE STYLES --- */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            -webkit-font-smoothing: antialiased;
+            user-select: none;
         }
 
         body, html {
-            background-color: #000000;
-            color: #ffffff;
-            overflow-x: hidden;
+            width: 100%;
             height: 100%;
+            overflow-x: hidden;
+            background-color: #050505;
+            font-family: 'Montserrat', sans-serif;
+            color: #ffffff;
         }
 
-        /* --- BACKGROUND CANVAS --- */
-        canvas {
+        /* --- INTERACTIVE CANVAS BACKGROUND --- */
+        #galaxy-canvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: 1;
-            pointer-events: none; /* Allows clicking elements through the canvas */
+            pointer-events: all;
         }
 
-        /* --- LAYOUT CONTAINER --- */
+        /* --- MAIN CONTENT CONTAINER --- */
         .wrapper {
             position: relative;
-            z-index: 2;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            padding: 3rem;
-        }
-
-        /* --- NAVIGATION --- */
-        header {
-            display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
+            z-index: 2;
+            padding: 2rem;
+            pointer-events: none; /* Allows mouse to pass through to canvas */
         }
 
-        .logo {
-            font-size: 1.2rem;
-            font-weight: 800;
-            letter-spacing: 0.4em;
-            text-transform: uppercase;
+        /* Re-enable pointer events for interactive elements */
+        .interactive-element {
+            pointer-events: auto;
         }
 
-        nav a {
-            color: #888888;
-            text-decoration: none;
-            font-size: 0.85rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            transition: color 0.3s ease;
-        }
-
-        nav a:hover {
-            color: #ffffff;
-        }
-
-        /* --- MAIN HERO SECTION --- */
-        main {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            max-width: 600px;
-            margin: 6rem 0;
-        }
-
-        .tagline {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5em;
-            color: #666666;
-            margin-bottom: 1rem;
+        /* --- HERO HEADER --- */
+        header {
+            text-align: center;
+            margin-bottom: 3.5rem;
+            animation: fadeIn 2s ease-out;
         }
 
         h1 {
-            font-size: 4rem;
-            font-weight: 300;
-            letter-spacing: -0.02em;
-            line-height: 1.1;
-            margin-bottom: 2rem;
+            font-family: 'Syncopate', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            letter-spacing: 15px;
             text-transform: uppercase;
+            color: #ffffff;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+            margin-bottom: 0.5rem;
+            transition: transform 0.3s ease;
         }
 
-        /* STUNNING VISUAL: Interactive Audio Release Card */
-        .release-card {
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(10px);
-            padding: 1.5rem;
-            width: 100%;
-            max-width: 400px;
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s;
-            cursor: pointer;
+        h1:hover {
+            transform: scale(1.03);
         }
 
-        .release-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(255, 255, 255, 0.4);
-        }
-
-        .artwork {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #111 0%, #333 100%);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Minimal vinyl record aesthetic inside artwork */
-        .artwork::before {
-            content: '';
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 1px dashed rgba(255,255,255,0.3);
-        }
-
-        .release-info {
-            flex-grow: 1;
-        }
-
-        .release-title {
-            font-size: 1rem;
-            font-weight: 500;
-            letter-spacing: 0.05em;
-            margin-bottom: 0.2rem;
-        }
-
-        .release-subtitle {
+        .subtitle {
             font-size: 0.8rem;
-            color: #666666;
+            font-weight: 200;
+            letter-spacing: 6px;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            color: #888888;
         }
 
-        /* Interactive Play Button Accent */
-        .play-btn {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            border: 1px solid #ffffff;
+        /* --- LINKS & NAVIGATION --- */
+        .links-container {
+            width: 100%;
+            max-width: 480px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            animation: fadeIn 2.5s ease-out;
+        }
+
+        .nav-link {
             display: flex;
             align-items: center;
-            justify-content: center;
-            background: transparent;
-            color: white;
-            cursor: pointer;
-            transition: background 0.3s, color 0.3s;
+            justify-content: space-between;
+            padding: 1.2rem 2rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 4px;
+            text-decoration: none;
+            color: #cccccc;
+            font-size: 0.9rem;
+            font-weight: 400;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
         }
 
-        .release-card:hover .play-btn {
-            background: #ffffff;
-            color: #000000;
+        .nav-link i {
+            font-size: 1.1rem;
+            transition: transform 0.4s ease;
+        }
+
+        /* Hover Aesthetics */
+        .nav-link:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .nav-link:hover i {
+            transform: translateX(5px);
         }
 
         /* --- FOOTER SOCIALS --- */
         footer {
+            margin-top: 4rem;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding-top: 2rem;
+            gap: 1.8rem;
+            animation: fadeIn 3s ease-out;
         }
 
-        .socials {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .socials a {
+        .social-icon {
             color: #666666;
-            text-decoration: none;
-            font-size: 0.8rem;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            transition: color 0.3s;
+            font-size: 1.3rem;
+            transition: all 0.3s ease;
         }
 
-        .socials a:hover {
+        .social-icon:hover {
             color: #ffffff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            transform: scale(1.2);
         }
 
-        .copyright {
-            font-size: 0.8rem;
-            color: #444444;
+        /* --- ANIMATIONS --- */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* --- RESPONSIVE DESIGN --- */
         @media (max-width: 768px) {
-            .wrapper { padding: 1.5rem; }
-            h1 { font-size: 2.5rem; }
-            footer { flex-direction: column; gap: 1.5rem; align-items: flex-start; }
+            h1 {
+                font-size: 2.2rem;
+                letter-spacing: 8px;
+            }
+            .subtitle {
+                font-size: 0.7rem;
+                letter-spacing: 4px;
+            }
+            .links-container {
+                padding: 0 1rem;
+            }
+            .nav-link {
+                padding: 1rem 1.5rem;
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
 <body>
 
-    <canvas id="galaxyCanvas"></canvas>
+    <canvas id="galaxy-canvas"></canvas>
 
     <div class="wrapper">
         
-        <header>
-            <div class="logo">ECHO</div>
-            <nav>
-                <a href="#music">Music</a>
-            </nav>
+        <header class="interactive-element">
+            <h1>Parallax</h1>
+            <p class="subtitle">Official Portal</p>
         </header>
 
-        <main>
-            <div class="tagline">New Project Out Now</div>
-            <h1>SILENT<br>EXPANSE</h1>
-            
-            <div class="release-card" id="musicCard">
-                <div class="artwork"></div>
-                <div class="release-info">
-                    <div class="release-title">Dark Matter</div>
-                    <div class="release-subtitle">Single — 2026</div>
-                </div>
-                <button class="play-btn" aria-label="Play Track">
-                    <svg width="10" height="12" viewBox="0 0 10 12" fill="currentColor">
-                        <path d="M0 0l10 6-10 6z"/>
-                    </svg>
-                </button>
-            </div>
+        <main class="links-container interactive-element">
+            <a href="https://boundless-official-store.printify.me/" target="_blank" class="nav-link">
+                <span>Official Store</span>
+                <i class="fa-solid fa-bag-shopping"></i>
+            </a>
+            <a href="https://discord.com/invite/rhXuzGvM6" target="_blank" class="nav-link">
+                <span>Discord Network</span>
+                <i class="fa-brands fa-discord"></i>
+            </a>
+            <a href="https://m.youtube.com/@parallax.x.x?ra=m" target="_blank" class="nav-link">
+                <span>YouTube Channel</span>
+                <i class="fa-brands fa-youtube"></i>
+            </a>
+            <a href="https://www.instagram.com/parallax.x.x?igsh=eTlnM20xZW5lcDUx&utm_source=qr" target="_blank" class="nav-link">
+                <span>Instagram</span>
+                <i class="fa-brands fa-instagram"></i>
+            </a>
+            <a href="https://www.tiktok.com/@parallax.x.x?_r=1&_t=ZT-94UGGvXVNug" target="_blank" class="nav-link">
+                <span>TikTok</span>
+                <i class="fa-brands fa-tiktok"></i>
+            </a>
         </main>
 
-        <footer>
-            <div class="socials">
-                <a href="#" target="_blank">Spotify</a>
-                <a href="#" target="_blank">Apple Music</a>
-                <a href="#" target="_blank">Bandcamp</a>
-                <a href="#" target="_blank">Instagram</a>
-            </div>
-            <div class="copyright">© 2026 ECHO. ALL RIGHTS RESERVED.</div>
+        <footer class="interactive-element">
+            <a href="https://x.com/Parallax_x_x" target="_blank" class="social-icon" title="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="https://www.facebook.com/Parallax.x.x.x.x/" target="_blank" class="social-icon" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
         </footer>
 
     </div>
 
     <script>
-        const canvas = document.getElementById('galaxyCanvas');
+        const canvas = document.getElementById('galaxy-canvas');
         const ctx = canvas.getContext('2d');
 
-        let width = canvas.width = window.innerWidth;
-        let height = canvas.height = window.innerHeight;
+        let particles = [];
+        const particleCount = 150;
+        let mouse = { x: null, y: null, radius: 150 };
 
-        const numStars = 180;
-        const stars = [];
+        // Resize Canvas dynamically
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
 
-        // Mouse tracking object
-        const mouse = {
-            x: null,
-            y: null,
-            radius: 180 // Area of impact around the cursor
-        };
-
+        // Track Mouse Movement
         window.addEventListener('mousemove', (e) => {
             mouse.x = e.clientX;
             mouse.y = e.clientY;
         });
 
-        window.addEventListener('mouseout', () => {
+        window.addEventListener('mouseleave', () => {
             mouse.x = null;
             mouse.y = null;
         });
 
-        window.addEventListener('resize', () => {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-        });
-
-        // Star Blueprint
-        class Star {
+        // Particle Class (Monochrome Nebula/Stars)
+        class Particle {
             constructor() {
                 this.reset();
-                // Randomize initial placements across the screen
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
             }
 
             reset() {
-                this.baseX = Math.random() * width;
-                this.baseY = Math.random() * height;
-                this.x = this.baseX;
-                this.y = this.baseY;
-                this.size = Math.random() * 2;
-                // Monochrome greyscale values 
-                const greyValue = Math.floor(Math.random() * 155) + 100; // 100 to 255
-                this.color = `rgba(${greyValue}, ${greyValue}, ${greyValue}, ${Math.random() * 0.6 + 0.2})`;
-                this.speedX = (Math.random() - 0.5) * 0.2;
-                this.speedY = (Math.random() - 0.5) * 0.2;
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                // Randomized monochromatic shades (pure black to brilliant white/grey)
+                const grayValue = Math.floor(Math.random() * 155) + 100; 
+                this.color = `rgba(${grayValue}, ${grayValue}, ${grayValue}, ${Math.random() * 0.6 + 0.2})`;
+                this.size = Math.random() * 2.5 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.3;
+                this.speedY = (Math.random() - 0.5) * 0.3;
+                this.baseSize = this.size;
             }
 
             update() {
-                // Natural drifting movement
-                this.baseX += this.speedX;
-                this.baseY += this.speedY;
+                this.x += this.speedX;
+                this.y += this.speedY;
 
-                // Wrap around edges if they drift off screen
-                if (this.baseX < 0 || this.baseX > width || this.baseY < 0 || this.baseY > height) {
+                // Infinite loop wrap-around boundaries
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
                     this.reset();
                 }
 
-                // Interactive Mouse Attraction/Distortion Matrix
+                // Interactive Mouse Parallax/Push Effect
                 if (mouse.x !== null && mouse.y !== null) {
-                    let dx = mouse.x - this.baseX;
-                    let dy = mouse.y - this.baseY;
+                    let dx = mouse.x - this.x;
+                    let dy = mouse.y - this.y;
                     let distance = Math.hypot(dx, dy);
-
+                    
                     if (distance < mouse.radius) {
-                        // Create a subtle pulling warp effect into the cursor galaxy core
-                        let force = (mouse.radius - distance) / mouse.radius;
-                        this.x += (dx / distance) * force * 2;
-                        this.y += (dy / distance) * force * 2;
+                        const force = (mouse.radius - distance) / mouse.radius;
+                        // Gently push stars away from mouse to create a deep dimension effect
+                        this.x -= (dx / distance) * force * 2;
+                        this.y -= (dy / distance) * force * 2;
+                        this.size = this.baseSize * (1 + force * 1.5);
+                    } else {
+                        if (this.size > this.baseSize) this.size -= 0.1;
                     }
                 }
-
-                // Smoothly ease back to baseline when mouse leaves zone
-                this.x += (this.baseX - this.x) * 0.08;
-                this.y += (this.baseY - this.y) * 0.08;
             }
 
             draw() {
-                ctx.fillStyle = this.color;
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = this.size * 2;
+                ctx.shadowColor = '#ffffff';
                 ctx.fill();
+                ctx.shadowBlur = 0; // Reset shadow for performance
             }
         }
 
-        // Initialize star system
-        for (let i = 0; i < numStars; i++) {
-            stars.push(new Star());
+        // Initialize starfield
+        function init() {
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
         }
 
-        // Animation loop
+        // Animation Loop
         function animate() {
-            // Slight opacity trail to give a faint astronomical motion blur effect
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.07)';
-            ctx.fillRect(0, 0, width, height);
+            // Slight opacity trail to give a sleek, deep-space galaxy motion blur
+            ctx.fillStyle = 'rgba(5, 5, 5, 0.15)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            stars.forEach(star => {
-                star.update();
-                star.draw();
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
             });
 
             requestAnimationFrame(animate);
         }
+
+        init();
         animate();
-
-        // Audio Toggle Interactive Simulation 
-        const musicCard = document.getElementById('musicCard');
-        const playBtn = musicCard.querySelector('.play-btn');
-        let isPlaying = false;
-
-        musicCard.addEventListener('click', () => {
-            isPlaying = !isPlaying;
-            if (isPlaying) {
-                // Toggle icon design to a minimal pause state bar representation
-                playBtn.innerHTML = `
-                    <svg width="10" height="12" viewBox="0 0 10 12" fill="currentColor">
-                        <path d="M0 0h3v12H0zm7 0h3v12H7z"/>
-                    </svg>
-                `;
-                musicCard.style.borderColor = "rgba(255,255,255,0.7)";
-            } else {
-                playBtn.innerHTML = `
-                    <svg width="10" height="12" viewBox="0 0 10 12" fill="currentColor">
-                        <path d="M0 0l10 6-10 6z"/>
-                    </svg>
-                `;
-                musicCard.style.borderColor = "rgba(255,255,255,0.1)";
-            }
-        });
     </script>
 </body>
 </html>
