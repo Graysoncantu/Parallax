@@ -47,7 +47,7 @@
             justify-content: center;
             align-items: center;
             z-index: 2;
-            padding: 2rem;
+            padding: 3rem 2rem;
             pointer-events: none; /* Allows mouse to pass through to canvas */
         }
 
@@ -59,7 +59,7 @@
         /* --- HERO HEADER --- */
         header {
             text-align: center;
-            margin-bottom: 3.5rem;
+            margin-bottom: 3rem;
             animation: fadeIn 2s ease-out;
         }
 
@@ -67,11 +67,12 @@
             font-family: 'Syncopate', sans-serif;
             font-size: 3.5rem;
             font-weight: 700;
-            letter-spacing: 15px;
-            text-transform: uppercase;
+            letter-spacing: 12px;
+            /* Changed to allow normal capitalization */
+            text-transform: none; 
             color: #ffffff;
             text-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.8rem;
             transition: transform 0.3s ease;
         }
 
@@ -95,6 +96,7 @@
             flex-direction: column;
             gap: 1.2rem;
             animation: fadeIn 2.5s ease-out;
+            margin-bottom: 2.5rem;
         }
 
         .nav-link {
@@ -134,17 +136,83 @@
             transform: translateX(5px);
         }
 
+        /* --- SUBSCRIPTION SECTION --- */
+        .subscribe-panel {
+            width: 100%;
+            max-width: 480px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            padding: 1.5rem;
+            text-align: center;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            animation: fadeIn 2.8s ease-out;
+            margin-bottom: 2rem;
+        }
+
+        .subscribe-panel h3 {
+            font-size: 0.75rem;
+            font-weight: 400;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #aaaaaa;
+            margin-bottom: 1rem;
+        }
+
+        .subscribe-form {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .subscribe-input {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.8rem 1rem;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            border-radius: 2px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .subscribe-input:focus {
+            border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .subscribe-btn {
+            background: #ffffff;
+            color: #050505;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .subscribe-btn:hover {
+            background: #cccccc;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
         /* --- FOOTER SOCIALS --- */
         footer {
-            margin-top: 4rem;
             display: flex;
             gap: 1.8rem;
-            animation: fadeIn 3s ease-out;
+            animation: fadeIn 3.2s ease-out;
         }
 
         .social-icon {
-            color: #666666;
-            font-size: 1.3rem;
+            color: #555555;
+            font-size: 1.2rem;
             transition: all 0.3s ease;
         }
 
@@ -163,19 +231,26 @@
         /* --- RESPONSIVE DESIGN --- */
         @media (max-width: 768px) {
             h1 {
-                font-size: 2.2rem;
+                font-size: 2.5rem;
                 letter-spacing: 8px;
             }
             .subtitle {
                 font-size: 0.7rem;
                 letter-spacing: 4px;
             }
-            .links-container {
-                padding: 0 1rem;
+            .links-container, .subscribe-panel {
+                padding: 1.2rem;
+                width: 92%;
             }
             .nav-link {
                 padding: 1rem 1.5rem;
                 font-size: 0.8rem;
+            }
+            .subscribe-form {
+                flex-direction: column;
+            }
+            .subscribe-btn {
+                width: 100%;
             }
         }
     </style>
@@ -212,11 +287,22 @@
                 <span>TikTok</span>
                 <i class="fa-brands fa-tiktok"></i>
             </a>
+            <a href="https://www.facebook.com/Parallax.x.x.x.x/" target="_blank" class="nav-link">
+                <span>Facebook</span>
+                <i class="fa-brands fa-facebook-f"></i>
+            </a>
         </main>
+
+        <section class="subscribe-panel interactive-element">
+            <h3>Subscribe for Updates</h3>
+            <form class="subscribe-form" onsubmit="event.preventDefault(); alert('Subscribed successfully.');">
+                <input type="email" class="subscribe-input" placeholder="ENTER YOUR EMAIL" required>
+                <button type="submit" class="subscribe-btn">Join</button>
+            </form>
+        </section>
 
         <footer class="interactive-element">
             <a href="https://x.com/Parallax_x_x" target="_blank" class="social-icon" title="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
-            <a href="https://www.facebook.com/Parallax.x.x.x.x/" target="_blank" class="social-icon" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
         </footer>
 
     </div>
@@ -229,7 +315,6 @@
         const particleCount = 150;
         let mouse = { x: null, y: null, radius: 150 };
 
-        // Resize Canvas dynamically
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -237,7 +322,6 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        // Track Mouse Movement
         window.addEventListener('mousemove', (e) => {
             mouse.x = e.clientX;
             mouse.y = e.clientY;
@@ -248,7 +332,6 @@
             mouse.y = null;
         });
 
-        // Particle Class (Monochrome Nebula/Stars)
         class Particle {
             constructor() {
                 this.reset();
@@ -257,7 +340,6 @@
             reset() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                // Randomized monochromatic shades (pure black to brilliant white/grey)
                 const grayValue = Math.floor(Math.random() * 155) + 100; 
                 this.color = `rgba(${grayValue}, ${grayValue}, ${grayValue}, ${Math.random() * 0.6 + 0.2})`;
                 this.size = Math.random() * 2.5 + 0.5;
@@ -270,12 +352,10 @@
                 this.x += this.speedX;
                 this.y += this.speedY;
 
-                // Infinite loop wrap-around boundaries
                 if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
                     this.reset();
                 }
 
-                // Interactive Mouse Parallax/Push Effect
                 if (mouse.x !== null && mouse.y !== null) {
                     let dx = mouse.x - this.x;
                     let dy = mouse.y - this.y;
@@ -283,7 +363,6 @@
                     
                     if (distance < mouse.radius) {
                         const force = (mouse.radius - distance) / mouse.radius;
-                        // Gently push stars away from mouse to create a deep dimension effect
                         this.x -= (dx / distance) * force * 2;
                         this.y -= (dy / distance) * force * 2;
                         this.size = this.baseSize * (1 + force * 1.5);
@@ -300,11 +379,10 @@
                 ctx.shadowBlur = this.size * 2;
                 ctx.shadowColor = '#ffffff';
                 ctx.fill();
-                ctx.shadowBlur = 0; // Reset shadow for performance
+                ctx.shadowBlur = 0; 
             }
         }
 
-        // Initialize starfield
         function init() {
             particles = [];
             for (let i = 0; i < particleCount; i++) {
@@ -312,9 +390,7 @@
             }
         }
 
-        // Animation Loop
         function animate() {
-            // Slight opacity trail to give a sleek, deep-space galaxy motion blur
             ctx.fillStyle = 'rgba(5, 5, 5, 0.15)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
