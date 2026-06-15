@@ -1,1 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECHO // Official Artist Profile</title>
+    <style>
+        /* --- RESET & BASE STYLES --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
 
+        body, html {
+            background-color: #000000;
+            color: #ffffff;
+            overflow-x: hidden;
+            height: 100%;
+        }
+
+        /* --- BACKGROUND CANVAS --- */
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none; /* Allows clicking elements through the canvas */
+        }
+
+        /* --- LAYOUT CONTAINER --- */
+        .wrapper {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 3rem;
+        }
+
+        /* --- NAVIGATION --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+        }
+
+        nav a {
+            color: #888888;
+            text-decoration: none;
+            font-size: 0.85rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #ffffff;
+        }
+
+        /* --- MAIN HERO SECTION --- */
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            max-width: 600px;
+            margin: 6rem 0;
+        }
+
+        .tagline {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5em;
+            color: #666666;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+        }
+
+        /* STUNNING VISUAL: Interactive Audio Release Card */
+        .release-card {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s;
+            cursor: pointer;
+        }
+
+        .release-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .artwork {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #111 0%, #333 100%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Minimal vinyl record aesthetic inside artwork */
+        .artwork::before {
+            content: '';
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px dashed rgba(255,255,255,0.3);
+        }
+
+        .release-info {
+            flex-grow: 1;
+        }
+
+        .release-title {
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.2rem;
+        }
+
+        .release-subtitle {
+            font-size: 0.8rem;
+            color: #666666;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Interactive Play Button Accent */
+        .play-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 1px solid #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .release-card:hover .play-btn {
+            background: #ffffff;
+            color: #000000;
+        }
+
+        /* --- FOOTER SOCIALS --- */
+        footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 2rem;
+        }
+
+        .socials {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .socials a {
+            color: #666666;
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+
+        .socials a:hover {
+            color: #ffffff;
+        }
+
+        .copyright {
+            font-size: 0.8rem;
+            color: #444444;
+        }
+
+        /* --- RESPONSIVE DESIGN --- */
+        @media (max-width: 768px) {
+            .wrapper { padding: 1.5rem; }
+            h1 { font-size: 2.5rem; }
+            footer { flex-direction: column; gap: 1.5rem; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="galaxyCanvas"></canvas>
+
+    <div class="wrapper">
+        
+        <header>
+            <div class="logo">ECHO</div>
+            <nav>
+                <a href="#music">Music</a>
+            </nav>
+        </header>
+
+        <main>
+            <div class="tagline">New Project Out Now</div>
+            <h1>SILENT<br>EXPANSE</h1>
+            
+            <div class="release-card" id="musicCard">
+                <div class="artwork"></div>
+                <div class="release-info">
+                    <div class="release-title">Dark Matter</div>
+                    <div class="release-subtitle">Single — 2026</div>
+                </div>
+                <button class="play-btn" aria-label="Play Track">
+                    <svg width="10" height="12" viewBox="0 0 10 12" fill="currentColor">
+                        <path d="M0 0l10 6-10 6z"/>
+                    </svg>
+                </button>
+            </div>
+        </main>
+
+        <footer>
+            <div class="socials">
+                <a href="#" target="_blank">Spotify</a>
+                <a href="#" target="_blank">Apple Music</a>
+                <a href="#" target="_blank">Bandcamp</a>
+                <a href="#" target="_blank">Instagram</a>
+            </div>
+            <div class="copyright">© 2026 ECHO. ALL RIGHTS RESERVED.</div>
+        </footer>
+
+    </div>
+
+    <script>
+        const canvas = document.getElementById('galaxyCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        const numStars = 180;
+        const stars = [];
+
+        // Mouse tracking object
+        const mouse = {
+            x: null,
+            y: null,
+            radius: 180 // Area of impact around the cursor
+        };
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        window.addEventListener('mouseout', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        // Star Blueprint
+        class Star {
+            constructor() {
+                this.reset();
+                // Randomize initial placements across the screen
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+            }
+
+            reset() {
+                this.baseX = Math.random() * width;
+                this.baseY = Math.random() * height;
+                this.x = this.baseX;
+                this.y = this.baseY;
+                this.size = Math.random() * 2;
+                // Monochrome greyscale values 
+                const greyValue = Math.floor(Math.random() * 155) + 100; // 100 to 255
+                this.color = `rgba(${greyValue}, ${greyValue}, ${greyValue}, ${Math.random() * 0.6 + 0.2})`;
+                this.speedX = (Math.random() - 0.5) * 0.2;
+                this.speedY = (Math.random() - 0.5) * 0.2;
+            }
+
+            update() {
+                // Natural drifting movement
+                this.baseX += this.speedX;
+                this.baseY += this.speedY;
+
+                // Wrap around edges if they drift off screen
+                if (this.baseX < 0 || this.baseX > width || this.baseY < 0 || this.baseY > height) {
+                    this.reset();
+                }
+
+                // Interactive Mouse Attraction/Distortion Matrix
+                if (mouse.x !== null && mouse.y !== null) {
+                    let dx = mouse.x - this.baseX;
+                    let dy = mouse.y - this.baseY;
+                    let distance = Math.hypot(dx, dy);
+
+                    if (distance < mouse.radius) {
+                        // Create a subtle pulling warp effect into the cursor galaxy core
+                        let force = (mouse.radius - distance) / mouse.radius;
+                        this.x += (dx / distance) * force * 2;
+                        this.y += (dy / distance) * force * 2;
+                    }
+                }
+
+                // Smoothly ease back to baseline when mouse leaves zone
+                this.x += (this.baseX - this.x) * 0.08;
+                this.y += (this.baseY - this.y) * 0.08;
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        // Initialize star system
+        for (let i = 0; i < numStars; i++) {
+            stars.push(new Star());
+        }
+
+        // Animation loop
+        function animate() {
+            // Slight opacity trail to give a faint astronomical motion blur effect
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.07)';
+            ctx.fillRect(0, 0, width, height);
+
+            stars.forEach(star => {
+                star.update();
+                star.draw();
+            });
+
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // Audio Toggle Interactive Simulation 
+        const musicCard = document.getElementById('musicCard');
+        const playBtn = musicCard.querySelector('.play-btn');
+        let isPlaying = false;
+
+        musicCard.addEventListener('click', () => {
+            isPlaying = !isPlaying;
+            if (isPlaying) {
+                // Toggle icon design to a minimal pause state bar representation
+                playBtn.innerHTML = `
+                    <svg width="10" height="12" viewBox="0 0 10 12" fill="currentColor">
+                        <path d="M0 0h3v12H0zm7 0h3v12H7z"/>
+                    </svg>
+                `;
+                musicCard.style.borderColor = "rgba(255,255,255,0.7)";
+            } else {
+                playBtn.innerHTML = `
+                    <svg width="10" height="12" viewBox="0 0 10 12" fill="currentColor">
+                        <path d="M0 0l10 6-10 6z"/>
+                    </svg>
+                `;
+                musicCard.style.borderColor = "rgba(255,255,255,0.1)";
+            }
+        });
+    </script>
+</body>
+</html>
